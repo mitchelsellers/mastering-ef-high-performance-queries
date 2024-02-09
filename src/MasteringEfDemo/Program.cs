@@ -31,7 +31,7 @@ namespace MasteringEfDemo
                 {
                     services.AddTransient<IDemoEngine, DemoEngine>();
                     services.AddTransient<IDemoRunner, DemoRunner>();
-                    services.AddDbContext<AdventureWorks2022Context>(options =>
+                    services.AddDbContextPool<AdventureWorks2022Context>(options =>
                         options
                             .UseLazyLoadingProxies() //Allows for lazy loading of entites
                             .UseSqlServer(connection));

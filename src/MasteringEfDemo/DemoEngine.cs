@@ -38,6 +38,16 @@ namespace MasteringEfDemo
         /// Demonstration of advanced query formatting
         /// </summary>
         void DemoStringAggregation();
+
+        /// <summary>
+        /// Showcases the usage of functions with dates
+        /// </summary>
+        void DemoDateFunctions();
+
+        /// <summary>
+        /// Example of a bulk update with a filter
+        /// </summary>
+        void DemoBulkUpdate();
     }
     public class DemoEngine(AdventureWorks2022Context context) : IDemoEngine
     {
@@ -197,6 +207,46 @@ namespace MasteringEfDemo
             {
                 Log.Information("{Name} Accounts: {Accounts}", item.Key, item.Accounts);
             }
+        }
+
+        public void DemoDateFunctions()
+        {
+            //Old Way
+            var minDate = DateTime.UtcNow.AddYears(-1);
+            var clients = context.Customers
+                .AsNoTracking()
+                .Where(c => c.ModifiedDate >= minDate)
+                .ToList();
+
+            //New Way
+            var clients2 = context.Customers
+                .AsNoTracking()
+                .Where(c => c.ModifiedDate > DateTime.Now.AddYears(-1))
+                .ToList();
+
+            //Fun with functions
+            var functionExample = context.Customers
+                .AsNoTracking()
+                .Select(c => new
+                {
+                    c.CustomerId,
+                    ModifiedDaysAgo = EF.Functions.DateDiffDay(c.ModifiedDate, DateTime.Now),
+                    c.ModifiedDate,
+                    ModifiedCentralTime = EF.Functions.AtTimeZone(c.ModifiedDate, "Central Standard Time")
+                })
+                .Take(15);
+            foreach (var item in functionExample)
+            {
+                Log.Information("{id} - Modified {days} ago - {Stored} - {Central} CST", item.CustomerId, item.ModifiedDaysAgo, item.ModifiedDate, item.ModifiedCentralTime);
+            }
+        }
+
+        public void DemoBulkUpdate()
+        {
+            context.Customers
+                .Where(c => c.ModifiedDate < DateTime.UtcNow.AddYears(4))
+                .ExecuteUpdate(c => c
+                    .SetProperty(u => u.ModifiedDate, u => u.ModifiedDate.AddDays(5)));
         }
     }
 }

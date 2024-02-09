@@ -1,4 +1,6 @@
-﻿namespace MasteringEfDemo;
+﻿using BenchmarkDotNet.Running;
+
+namespace MasteringEfDemo;
 
 /// <summary>
 ///     Represents the runner entry point for the demo system, responsible for inputs & command selection
@@ -53,7 +55,12 @@ public class DemoRunner(IDemoEngine engine) : IDemoRunner
                 case DemoCommandOptions.StringAggregation:
                     engine.DemoStringAggregation(); 
                     break;
-
+                case DemoCommandOptions.DateFunctions:
+                    engine.DemoDateFunctions();
+                    break;
+                case DemoCommandOptions.BulkUpdates:
+                    engine.DemoBulkUpdate();
+                    break;
                 case DemoCommandOptions.Exit:
                     exitRequested = true;
                     break;

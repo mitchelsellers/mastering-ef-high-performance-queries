@@ -20,6 +20,10 @@ public enum DemoCommandOptions
     SplitQuery = 7,
     [Display(Name = "String Aggregation (STRING_AGG())")]
     StringAggregation = 8,
+    [Display(Name = "Date Functions")]
+    DateFunctions = 9,
+    [Display(Name = "Bulk Updates")]
+    BulkUpdates = 10,
     [Display(Name = "Exit")]
     Exit = 99
 }
