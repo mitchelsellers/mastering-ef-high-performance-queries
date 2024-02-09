@@ -50,6 +50,9 @@ public class DemoRunner(IDemoEngine engine) : IDemoRunner
                 case DemoCommandOptions.SplitQuery:
                     engine.DemoSplitQuery();
                     break;
+                case DemoCommandOptions.StringAggregation:
+                    engine.DemoStringAggregation(); 
+                    break;
 
                 case DemoCommandOptions.Exit:
                     exitRequested = true;

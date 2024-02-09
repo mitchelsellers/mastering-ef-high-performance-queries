@@ -18,6 +18,8 @@ public enum DemoCommandOptions
     PagedResults = 6,
     [Display(Name = "Split Query Example")]
     SplitQuery = 7,
+    [Display(Name = "String Aggregation (STRING_AGG())")]
+    StringAggregation = 8,
     [Display(Name = "Exit")]
     Exit = 99
 }

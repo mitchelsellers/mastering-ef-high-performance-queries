@@ -33,6 +33,11 @@ namespace MasteringEfDemo
         /// Demonstrates the process of query splitting
         /// </summary>
         void DemoSplitQuery();
+
+        /// <summary>
+        /// Demonstration of advanced query formatting
+        /// </summary>
+        void DemoStringAggregation();
     }
     public class DemoEngine(AdventureWorks2022Context context) : IDemoEngine
     {
@@ -172,6 +177,26 @@ namespace MasteringEfDemo
             Log.Information("Without Split Count {Count}", items.Count());
             Log.Information("With Split Execution {Elapsed}", elapsed2);
             Log.Information("With Split Count {Count}", customers.Count());
+        }
+
+        public void DemoStringAggregation()
+        {
+            var personList = context.Customers
+                .AsNoTracking()
+                .Where(c => c.Person != null)
+                .GroupBy(g => g.Person.FirstName)
+                .Select(s => new
+                {
+                    s.Key,
+                    Accounts = string.Join(", ", s.Select(customer => customer.AccountNumber))
+                })
+                .ToList();
+
+            Log.Information("Total Records {Count}", personList.Count());
+            foreach (var item in personList.Take(15))
+            {
+                Log.Information("{Name} Accounts: {Accounts}", item.Key, item.Accounts);
+            }
         }
     }
 }
